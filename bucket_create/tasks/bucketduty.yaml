@@ -1,0 +1,36 @@
+---
+- name: prepare S3 bucket
+  block:
+    - name: cant have holes in this bucket
+      pip:
+          name: "{{ item }}"
+      loop:
+        - boto
+        - boto3
+        - botocore
+    - name: describe the use of the bucket
+      set fact: 
+        s3_bucket_policy: |
+          {
+            "Version": "2012-10-17"
+            "Statement": [
+              {
+                "Sid": "PublicRead",
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::httpdlogs-vkb/*"
+              }
+            ]
+          }
+    - name: forging of my bucket
+      s3_bucket:
+        name: httpdlogs-vkb
+        region: us-east-1
+        state: present
+        policy: "{{ s3_bucket_policy }}"
+        public_access:
+          block_public_acls: false
+          ignore_public_acls: false
+          block_public_policy: false
+          restrict_public_buckets: false

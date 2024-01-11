@@ -1,0 +1,6 @@
+---
+- name: My fourth playbook
+  hosts: all
+  gather_facts: true
+  vars_files:
+    - "vars.yaml"

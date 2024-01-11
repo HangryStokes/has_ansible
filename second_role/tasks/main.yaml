@@ -1,0 +1,10 @@
+- name: add mult users to group
+  user:
+    name: "{{ item }}"
+    state: present
+    group: "wheel"
+  loop:
+    - testuser1
+    - testuser2
+    - testuser3
+    - testuserabc
